@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import urllib.request
 from gensim.models.word2vec import Word2Vec
 from konlpy.tag import Okt
+from tqdm import tqdm
 
 urllib.request.urlretrieve("https://raw.githubusercontent.com/e9t/nsmc/master/ratings.txt", filename="ratings.txt")
 
@@ -59,3 +60,4 @@ print(word2vec_model.similarity('love', '한국'))
 
 
 ko_model = gensim.models.Word2Vec.load('model/ko/ko.bin')
+
