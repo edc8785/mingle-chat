@@ -222,4 +222,7 @@ $RECYCLE.BIN/
 
 
 # NLP Model
-model/
+recommend/model/
+
+# AWS token
+aws_token.txt
