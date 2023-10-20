@@ -1,5 +1,4 @@
 import re
-from collections.abc import Mapping
 import gensim
 import pandas as pd
 import numpy as np
