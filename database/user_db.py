@@ -1,21 +1,9 @@
 import pymysql
 from database.user_table import UserTable
 
-"""
-f = open('aws_token.txt', 'r')     # mode = 부분은 생략해도 됨
-lines = f.readlines()
-f.close()
-
-host = lines[0].replace("\n", "")
-port = lines[1].replace("\n", "")
-user = lines[2].replace("\n", "")
-db = lines[3].replace("\n", "")
-password = lines[4].replace("\n", "")
-"""
-
 class UserDB:
     def __init__(self):
-        f = open('aws_token.txt', 'r')     # mode = 부분은 생략해도 됨
+        f = open('aws_token.txt', 'r') 
         lines = f.readlines()
         f.close()
 

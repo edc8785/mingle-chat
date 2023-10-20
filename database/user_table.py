@@ -8,4 +8,4 @@ class UserTable:
         self.description = description
 
     def __str__(self):
-        return 'id:'+self.id+', pwd:'+self.pwd
+        return 'id:'+self.id
