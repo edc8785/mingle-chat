@@ -42,7 +42,7 @@ class UserManagement:
         cursor.execute(select_user_id_query, (email,))
         (user_id,) = cursor.fetchone()
         cursor.close()
-        return user_id[0]
+        return user_id
 
     # 사용자 탈퇴 (추가)
     def delete_user(self, email):

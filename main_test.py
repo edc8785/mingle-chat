@@ -22,8 +22,6 @@ user_manager.save_user_post("test_email", "test_title3", "title_main3")
 user_manager.save_user_post("test_email", "test_title4", "title_main4")
 
 
-
-
 import mysql.connector
 import firebase_admin
 from firebase_admin import credentials
