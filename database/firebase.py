@@ -34,6 +34,13 @@ class UserManagement:
             cursor.execute(insert_user_query, (username, password))
         self.connection.commit()
 
+    # 사용자 탈퇴 (추가)
+    def delete_user(self, username):
+        with self.connection.cursor() as cursor:
+            delete_user_query = "DELETE FROM users WHERE username = %s"
+            cursor.execute(delete_user_query, (username,))
+        self.connection.commit()
+
     # 사용자 로그인
     def login(self, username, password):
         with self.connection.cursor() as cursor:
@@ -54,3 +61,20 @@ class UserManagement:
                 insert_post_query = "INSERT INTO posts (user_id, content) VALUES (%s, %s)"
                 cursor.execute(insert_post_query, (user_id[0], content))
                 self.connection.commit()
+
+    # 사용자 게시글 조회 (추가)
+    def get_user_posts(self, username):
+        with self.connection.cursor() as cursor:
+            select_posts_query = "SELECT content FROM posts WHERE user_id = (SELECT id FROM users WHERE username = %s)"
+            cursor.execute(select_posts_query, (username,))
+            posts = cursor.fetchall()
+            return [post[0] for post in posts]
+
+    # 사용자 게시글 삭제 (추가)
+    def delete_user_post(self, username, post_id):
+        with self.connection.cursor() as cursor:
+            delete_post_query = "DELETE FROM posts WHERE user_id = (SELECT id FROM users WHERE username = %s) AND id = %s"
+            cursor.execute(delete_post_query, (username, post_id))
+        self.connection.commit()
+
+
