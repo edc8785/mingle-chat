@@ -1,1 +1,1 @@
-__all__=['user_table', 'user_db']
+__all__=['user_table', 'user_db', 'firebase']

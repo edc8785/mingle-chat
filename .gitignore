@@ -221,8 +221,8 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,python,visualstudiocode
 
 
-# NLP Model
-## recommend/model/
+# Firebase Admin SDK
+mingle-chat-fb-firebase-adminsdk-pb2jz-3db7100a19.json
 
 # AWS token
 aws_token.txt
