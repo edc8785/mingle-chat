@@ -55,7 +55,7 @@ def delete_user_api():
 
 
 # 게시글 조회
-@app.route("/get_post_api", methods=["GET"])
+@app.route("/get_post_api", methods=["POST"])
 def get_post_api():
     data = request.get_json()
     email = data['email']
