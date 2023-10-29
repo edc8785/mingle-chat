@@ -57,7 +57,8 @@ def delete_user_api():
 # 게시글 조회
 @app.route("/get_post_api", methods=["GET"])
 def get_post_api():
-    email = request.args.get("email")
+    data = request.get_json()
+    email = data['email']
     if email:
         # 사용자 게시글 조회
         posts = user_manager.get_user_post(email)
@@ -68,8 +69,9 @@ def get_post_api():
 # 게시글 삭제
 @app.route("/delete_post_api", methods=["POST"])
 def delete_post_api():
-    email = request.json.get("email")
-    post_id = request.json.get("post_id")
+    data = request.get_json()
+    email = data["email"]
+    post_id = data["post_id"]
     if email and post_id:
         # 사용자 게시글 삭제
         user_manager.delete_user_post(email, post_id)
@@ -84,8 +86,8 @@ def save_post_api():
     ##firebase_token = request.headers.get("Authorization").split(" ")[1]
     # Firebase 토큰 검증
     ##result = firebase.verify_firebase_token(firebase_token)
-
-    email = request.json.get("email")
+    data = request.get_json()
+    email = data["email"]
     content_title = request.json.get("content_title")
     content_main = request.json.get("content_main")
     
