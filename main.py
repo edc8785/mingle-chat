@@ -114,6 +114,7 @@ if __name__ == "__main__":
     service_account_key_path = "mingle-chat-fb-firebase-adminsdk-pb2jz-3db7100a19.json"
 
     user_manager = firebase.UserManagement(db_host, db_user, db_password, db_database, service_account_key_path)
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port="5000")
+
 
 
