@@ -7,6 +7,7 @@ app = Flask(__name__)
 def home():
     return 'mingle-chat'
 
+"""
 @app.route('/postman', methods=['GET','POST'])
 def postman():
     return "post-test"
@@ -52,6 +53,7 @@ def delete_user_api():
     data = request.get_json()
     email = data['email']
     user_manager.delete_user(email)
+    return jsonify({"message": "delete successful"})
 
 
 # 게시글 조회
@@ -96,6 +98,63 @@ def save_post_api():
         return jsonify({"message": "게시물 저장 성공", "post_id":post_id})
     else:
         return jsonify({"message": "게시물 저장 실패"})
+"""
+
+# 특정 ID의 게시글 조회 (GET 요청)
+@app.route('/posts/<int:post_id>', methods=['GET', 'PUT'])
+def get_post():
+    if(request.method == 'GET'):
+        data = request.get_json()
+        post_id = data["post_id"]
+
+        post = user_manager.get_user_post()
+        return jsonify({"posts":post}), 200
+
+        ##return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
+
+    elif(request.method == 'PUT'):
+        data = request.get_json()
+        post_id = data["post_id"]
+
+        post = user_manager.get_user_post()
+        return jsonify({"posts":post}), 200
+
+        ##return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
+
+
+
+# 모든 게시글 조회 (GET 요청)
+@app.route('/posts', methods=['GET', 'POST', 'DELETE'])
+def get_posts():
+    if(request.method == 'GET'):
+        data = request.get_json()
+        post_id = data["post_id"]
+
+        post = user_manager.get_user_post()
+        return jsonify({"posts":post}), 200
+        ## return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        post_id = data["post_id"]
+
+        post = user_manager.get_user_post()
+        return jsonify({"posts":post}), 200
+        ## return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
+
+
+    elif request.method == 'DELETE':
+        data = request.get_json()
+        post_id = data["post_id"]
+
+        post = user_manager.get_user_post()
+        return jsonify({"posts":post}), 200
+        ## return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
+
+    else:
+        return jsonify({"error": "허용되지 않는 요청입니다."}), 405
+
+
 
 
 
@@ -113,8 +172,52 @@ if __name__ == "__main__":
     db_password = lines[4].replace("\n", "")
     service_account_key_path = "mingle-chat-fb-firebase-adminsdk-pb2jz-3db7100a19.json"
 
+
     user_manager = firebase.UserManagement(db_host, db_user, db_password, db_database, service_account_key_path)
     app.run(host="0.0.0.0", port="5000")
 
 
 
+
+
+
+from database import *
+service_account_key_path = "mingle-chat-fb-firebase-adminsdk-pb2jz-3db7100a19.json"
+
+import mysql.connector
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import auth
+# Firebase Admin SDK 초기화
+cred = credentials.Certificate(service_account_key_path)
+firebase_admin.initialize_app(cred)
+
+user = auth.get_user_by_email("edc8786@g.skku.edu")
+user.uid
+
+
+
+current_user = auth.get_user(uid=user.uid)
+current_user = auth.get_user("CzEbalGFi4YPM9t2Hp6Jl7ASmEq1")
+current_user = auth.get_user("test")
+current_user.display_name
+
+auth.verify_id_token(user.uid)
+
+import requests
+
+# Firebase Cloud Function 또는 엔드포인트 URL (실제 Firebase 프로젝트에 맞게 수정)
+firebase_url = "https://your-firebase-app-url.com/your-function-endpoint"
+# 사용자의 ID 토큰
+user_id_token = "사용자의_ID_토큰_입력"
+# 요청 헤더에 ID 토큰 추가
+headers = {
+    "Authorization": f"Bearer {user_id_token}"
+}
+
+# POST 요청 예시 (원하는 방식 선택)
+response = requests.post(firebase_url, headers=headers, data={"key": "value"})
+
+# 응답 출력
+print(response.status_code)
+print(response.text)
