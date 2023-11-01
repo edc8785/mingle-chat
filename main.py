@@ -7,20 +7,17 @@ app = Flask(__name__)
 def home():
     return 'mingle-chat'
 
-"""
 @app.route('/postman', methods=['GET','POST'])
 def postman():
-    return "post-test"
-
-@app.route('/add_two_nums', methods=['POST'])
-def add() :
-    # 클라이언트로부터 두 수를 받는다. request 라이브러리 사용
-    data = request.get_json()
-    ret = data['x'] + data['y']
-    result = {'result' : ret}
-    return jsonify(result)
+    if(request.method == 'GET'):
+        return "GET-test"
+    elif(request.method == 'POST'):
+        return "POST-test"
+    else:
+        return "Not allowed method"
 
 
+"""
 # 회원가입 API
 @app.route('/register_user_api', methods=['POST'])
 def register_user_api():
@@ -34,17 +31,6 @@ def register_user_api():
 
     user_id = user_manager.register_user(email, password, activity_name, message, description, interest_category)
     return jsonify({"message": "User created successfully", "user_id": user_id})
-
-
-# 로그인 API
-@app.route('/login_user_api', methods=['POST'])
-def login_user_api():
-    data = request.get_json()
-    email = data['email']
-    password = data['password']
-    if user_manager.login_user(email, password):
-        return jsonify({"message": "Login successful"})
-    return jsonify({"error"}), 401
 
 
 # 회원탈퇴 API
@@ -100,6 +86,44 @@ def save_post_api():
         return jsonify({"message": "게시물 저장 실패"})
 """
 
+
+# 회원가입 API
+@app.route('/register_user', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    email = data['email']
+    password = data['password']
+    profile_img_url = data['profile_img_url']
+    activity_name = data['activity_name']
+    message = data['message']
+    description = data['description']
+    interest_category = data['interest_category']
+    sns_url = data['sns_url']
+
+    user_id = user_manager.register_user(email, password, profile_img_url, activity_name, message, description, interest_category, sns_url)
+    if user_id:
+        return jsonify({"message": "User created successfully", "user_id": user_id}), 200
+    else:
+        return jsonify({"error": "Failed to register user"}), 500
+
+
+# 회원탈퇴 API
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    data = request.get_json()
+    user_id = data['user_id']
+
+    if user_id:
+        result = user_manager.delete_user(user_id)
+        if result:
+            return jsonify({"message": "delete successful"}), 200
+        else:
+            return jsonify({"error": "Failed to delete user"}), 500
+    else:
+        return jsonify({"error": "Missing 'user_id' in the request"}), 400
+
+
+
 # 특정 ID의 게시글 조회 (GET 요청)
 @app.route('/posts/<int:post_id>', methods=['GET', 'PUT'])
 def get_post():
@@ -121,6 +145,8 @@ def get_post():
 
         ##return jsonify({"error": "게시글을 찾을 수 없습니다."}), 404
 
+    else:
+        return jsonify({"error": "허용되지 않는 요청입니다."}), 405
 
 
 # 모든 게시글 조회 (GET 요청)
@@ -175,49 +201,3 @@ if __name__ == "__main__":
 
     user_manager = firebase.UserManagement(db_host, db_user, db_password, db_database, service_account_key_path)
     app.run(host="0.0.0.0", port="5000")
-
-
-
-
-
-
-from database import *
-service_account_key_path = "mingle-chat-fb-firebase-adminsdk-pb2jz-3db7100a19.json"
-
-import mysql.connector
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import auth
-# Firebase Admin SDK 초기화
-cred = credentials.Certificate(service_account_key_path)
-firebase_admin.initialize_app(cred)
-
-user = auth.get_user_by_email("edc8786@g.skku.edu")
-user.uid
-
-
-
-current_user = auth.get_user(uid=user.uid)
-current_user = auth.get_user("CzEbalGFi4YPM9t2Hp6Jl7ASmEq1")
-current_user = auth.get_user("test")
-current_user.display_name
-
-auth.verify_id_token(user.uid)
-
-import requests
-
-# Firebase Cloud Function 또는 엔드포인트 URL (실제 Firebase 프로젝트에 맞게 수정)
-firebase_url = "https://your-firebase-app-url.com/your-function-endpoint"
-# 사용자의 ID 토큰
-user_id_token = "사용자의_ID_토큰_입력"
-# 요청 헤더에 ID 토큰 추가
-headers = {
-    "Authorization": f"Bearer {user_id_token}"
-}
-
-# POST 요청 예시 (원하는 방식 선택)
-response = requests.post(firebase_url, headers=headers, data={"key": "value"})
-
-# 응답 출력
-print(response.status_code)
-print(response.text)

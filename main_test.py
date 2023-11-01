@@ -48,3 +48,47 @@ select_post_id_query = "SELECT post_id FROM user_posts WHERE email = %s ORDER BY
 cursor.execute(select_post_id_query, ("test_email",))
 post_id = cursor.fetchone()
 post_id = cursor.fetchone()
+
+
+"""
+from database import *
+service_account_key_path = "mingle-chat-fb-firebase-adminsdk-pb2jz-3db7100a19.json"
+
+import mysql.connector
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import auth
+# Firebase Admin SDK 초기화
+cred = credentials.Certificate(service_account_key_path)
+firebase_admin.initialize_app(cred)
+
+user = auth.get_user_by_email("edc8786@g.skku.edu")
+user.uid
+
+
+
+current_user = auth.get_user(uid=user.uid)
+current_user = auth.get_user("CzEbalGFi4YPM9t2Hp6Jl7ASmEq1")
+current_user = auth.get_user("test")
+current_user.display_name
+
+auth.verify_id_token(user.uid)
+
+import requests
+
+# Firebase Cloud Function 또는 엔드포인트 URL (실제 Firebase 프로젝트에 맞게 수정)
+firebase_url = "https://your-firebase-app-url.com/your-function-endpoint"
+# 사용자의 ID 토큰
+user_id_token = "사용자의_ID_토큰_입력"
+# 요청 헤더에 ID 토큰 추가
+headers = {
+    "Authorization": f"Bearer {user_id_token}"
+}
+
+# POST 요청 예시 (원하는 방식 선택)
+response = requests.post(firebase_url, headers=headers, data={"key": "value"})
+
+# 응답 출력
+print(response.status_code)
+print(response.text)
+"""

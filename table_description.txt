@@ -1,3 +1,47 @@
+## ver2
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    profile_img_url VARCHAR(255),
+    activity_name VARCHAR(255),
+    message TEXT,
+    description TEXT,
+    interest_category TEXT,
+    sns_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE posts (
+    post_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT UNIQUE NOT NULL,
+    project_name VARCHAR(255),
+    category VARCHAR(255),
+    period TEXT,
+    intro TEXT,
+    offer TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE user_post_count (
+    user_id INT PRIMARY KEY,
+    post_count INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+
+
+
+
+
+
+
+
+
+## ver1
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
